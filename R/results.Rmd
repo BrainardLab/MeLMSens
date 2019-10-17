@@ -2,27 +2,19 @@
 library(tidyverse)
 library(here)
 source(here('R','load_data.R'))
+source(here('src','clean_data.R'))
 ```
 ```{r load data}
 JNDs <- load_data()
 ```
 ```{r clean}
-JNDs <- JNDs %>%
-  ungroup() %>%
-  # Reorder axis
-  mutate(axis = relevel(factor(axis),'Mel')) %>%
-  mutate(axis = recode_factor(axis, Mel = "Melanopsin", LMS = "Luminance")) %>%
-  
-  # Rename participants
-  mutate(participant = recode_factor(participant, 
-                                     HERO_GKA = "Participant 1", 
-                                     HERO_DHB = "Participant 2", 
-                                     HERO_JXV = "Participant 3")) %>%
-
-  group_by(participant, axis)
+JNDs <- clean_data(JNDs)
 ```
 ```{r normalize JNDs}
 JNDs <- JNDs %>%
+  # Select only relevant columns
+  select(-threshold_contrast, -LMS_background) %>%
+  
   # Convert to wide-format: separate columns for high/low
   spread(key = level, value = threshold_JND) %>%
   
