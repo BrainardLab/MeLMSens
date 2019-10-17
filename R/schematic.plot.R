@@ -49,3 +49,27 @@ plot_lowhigh <- function(SPDs) {
     )
   return(p)
 }
+
+plot_lowflicker <- function(SPDs) {
+  p <- ggplot(data = SPDs) +
+    aes(x = Wls) +
+    geom_path(aes(y = Mel_low), size = 1, alpha = .66, color = 1) +
+    geom_path(aes(y = Mel_low_neg), size = 1, alpha = .33, color = 1) + 
+    geom_path(aes(y = Mel_low_pos), size = 1, alpha = 1, color = 1) + 
+    
+    # Labels
+    ylab("Radiometric Power") +
+    xlab("Wavelength (nm)") +
+    scale_y_continuous(breaks = FALSE) +
+    
+    # theme
+    theme_bw() +  
+    theme(text = element_text(size=14),
+          strip.background =element_rect(fill="#01256e"),
+          strip.text = element_text(colour = 'white'),
+          axis.title.y = element_text(margin = margin(r = .25, unit = "in")),
+          panel.grid.minor = element_blank(),
+          panel.grid.major = element_blank()
+    ) 
+  return(p)
+}
