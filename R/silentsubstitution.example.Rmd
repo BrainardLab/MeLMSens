@@ -1,0 +1,26 @@
+```{r setup}
+library(tidyverse)
+library(here)
+library(readr)
+source(here('R','schematic.plot.R'))
+```
+```{r load}
+receptors = read_csv(here('data','example','receptors.csv'),col_names = c("Wls","L","M","S","Mel"))
+
+SPDs = read_csv(here('data','example','example.SPDs.csv'),
+                col_names = c("Wls",
+                              "LMS_low","LMS_low_pos","LMS_low_neg",
+                              "LMS_high","LMS_high_pos","LMS_high_neg",
+                              "Mel_low","Mel_low_pos","Mel_low_neg",
+                              "Mel_high","Mel_high_pos","Mel_high_neg"
+                              ))
+```
+```{r plot receptors}
+plot_receptors(receptors)
+```
+```{r plot Mel low/high SPDs}
+plot_lowhigh(SPDs)
+```
+```{r plot flicker mel low SPDs}
+plot_lowflicker(SPDs)
+```
