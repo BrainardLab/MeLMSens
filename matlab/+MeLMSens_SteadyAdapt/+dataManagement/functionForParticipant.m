@@ -12,6 +12,8 @@ sessionNames = MeLMSens_SteadyAdapt.dataManagement.listSessions(participant);
 for sessionName = sessionNames
     sessionName = sessionName{:};
     
+    fprintf('Processing session %s...',sessionName);
+
     % Execute
     if ~exist('output','var')
         output = fcn(participant, sessionName);
@@ -19,5 +21,7 @@ for sessionName = sessionNames
         tmp = fcn(participant, sessionName);
         output = vertcat(output,tmp);
     end
+    
+    fprintf('done.\n');
 end
 end
