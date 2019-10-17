@@ -104,6 +104,11 @@
 		"url": ""
 	},
     {
+        "name": "Palamedes_1.8.2",
+        "pathPlacement": "append",
+        "type": "include"
+    },
+    {
 		"name": "MeLMSens",
 		"type": "git",
         "url": "https://github.com/JorisVincent/MeLMSens",
