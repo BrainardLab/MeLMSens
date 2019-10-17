@@ -3,10 +3,11 @@ library(ggplot2)
 plot_JNDs <- function (JNDs, medianJNDs) {
   p <-  ggplot() +
     # Individual sessions
-    geom_line(data = JNDs, aes(x = level, y = JND, group=session), alpha = .4) +
+    geom_line(data = JNDs, aes(x = level, y = JND, group=session), alpha = .7) +
     
     # Participant median and SEM
     geom_point(data = median_JNDs, aes(x = level, y = median), size = 1) +
+    geom_line(data = median_JNDs, aes(x = level, y = median, group = 1), size =1) +
     geom_linerange(data = median_JNDs, aes(x = level, ymin = MminSEM, ymax = MplusSEM), size = 1) +
     
     # Markup
