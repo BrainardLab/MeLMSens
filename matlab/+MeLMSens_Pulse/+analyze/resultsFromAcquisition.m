@@ -37,7 +37,7 @@ switch name
     case "Pedestal"
         results.level = "high";
 end
-results.threshold_contrast = MeLMSens_SteadyAdapt.analyze.thresholdContrastFromAcquisition(acquisition);
-results.LMS_background = MeLMSens_SteadyAdapt.analyze.backgroundLMSFromAcquisition(acquisition);
+results.threshold_contrast = MeLMSens_Pulse.analyze.thresholdContrastFromAcquisition(acquisition);
+results.LMS_background = MeLMSens_Pulse.analyze.backgroundLMSFromAcquisition(acquisition);
 results.threshold_JND = results.threshold_contrast * results.LMS_background;
 end
