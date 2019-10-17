@@ -1,6 +1,6 @@
-load_data <- function() {
+load_adapt <- function() {
   require(tidyverse)
-  JNDs <- read_csv(here('data','experimental','results.csv'), na = c("", "NA", "NaN")) %>%
+  JNDs <- read_csv(here('data','experimental','adapt.results.csv'), na = c("", "NA", "NaN")) %>%
     mutate(level = factor(level)) %>%
     mutate(axis = factor(axis))
   return(JNDs)
