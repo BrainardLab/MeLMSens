@@ -9,6 +9,7 @@ source(here('R','results.plot.R'))
 make_figures_JNDs <- function(){
   make_figure_JNDs_adapt()
   make_figure_JNDs_pulse()
+  make_figure_JNDs_pulse2()  
 }
 
 make_figure_JNDs_adapt <- function() {
@@ -55,4 +56,27 @@ make_figure_JNDs_pulse <- function() {
   
   # save
   ggsave(here('figs','pulse.results.pdf'), width = 10, height = 5)
+}
+
+make_figure_JNDs_pulse2 <- function() {
+  # load data
+  results <- load_pulse2()
+  
+  # clean
+  results <- clean_data(results)
+  
+  # normalize JNDs
+  JNDs <- normalize_JNDs(results)
+  
+  # filter
+  JNDs <- filter(JNDs,axis == 'Melanopsin')
+  
+  # median JNDs
+  medianJNDs <- median_JNDs(JNDs)
+  
+  # plot JNDs
+  plot_JNDs(JNDs,medianJNDs)
+  
+  # save
+  ggsave(here('figs','pulse2.results.pdf'), width = 10, height = 5)
 }
