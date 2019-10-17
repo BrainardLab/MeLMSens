@@ -23,3 +23,8 @@ for protocol = protocolNames
     protocolRawDataDir = fullfile(rawDataDir,protocol);
     setpref(protocol,'ProtocolDataRawPath',protocolRawDataDir);
 end
+
+%% Output data dir
+projectDir = tbLocateProject('MeLMSens');
+dataDir = fullfile(projectDir, 'data');
+setpref('MeLMSens','dataDir',dataDir);
