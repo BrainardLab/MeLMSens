@@ -13,3 +13,10 @@ load_pulse <- function() {
     mutate(axis = factor(axis))
   return(JNDs)
 }
+
+load_pulse2 <- function() {
+  JNDs <- read_csv(here('data','experimental','pulse2.results.csv'), na = c("", "NA", "NaN")) %>%
+    mutate(level = factor(level)) %>%
+    mutate(axis = factor(axis))
+  return(JNDs)
+}
