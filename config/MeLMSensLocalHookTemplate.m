@@ -28,3 +28,9 @@ end
 projectDir = tbLocateProject('MeLMSens');
 dataDir = fullfile(projectDir, 'data');
 setpref('MeLMSens','dataDir',dataDir);
+if ~exist(fullfile(dataDir,'experimental'),'dir')
+    mkdir(fullfile(dataDir,'experimental'));
+end
+if ~exist(fullfile(projectDir,'figs'),'dir')
+    mkdir(fullfile(projectDir,'figs'));
+end
