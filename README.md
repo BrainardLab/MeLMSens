@@ -1,15 +1,11 @@
 MeLMSens
 
 To do:
-- Have the code check for and create data/experimental if not present
-- set up the "figs" directory
 - Script on the R side to create all the figures
 - Arrange for the figures to be copied to or created within the paper DropBox directory
 - Need to get the OLApproach_Psychophysics project on the path. For now might state that this needs to be done by hand after tbuseproject
 - This could be done by having an add path command within MeLMSens local hook to add the OLApproach_Psychophysics
 - Need to resolve / merge the "dev" branch of OneLightToolbox
-- Splatter figures
-
 
 MATLAB operations
 1) `exportAllResultsToCSV` - This reads the raw data from DropBox and saves processed data into the local (within this repo) data directory
