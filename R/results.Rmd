@@ -21,7 +21,7 @@ JNDs <- normalize_JNDs(results)
 JNDs <- filter(JNDs,axis == 'Melanopsin')
 ```
 ```{r median JNDs}
-median_JNDs <- median_JNDs(JNDs)
+medianJNDs <- median_JNDs(JNDs)
 ```
 ```{r plot JNDs}
 plot_JNDs(JNDs,medianJNDs)
