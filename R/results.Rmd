@@ -3,29 +3,16 @@ library(tidyverse)
 library(here)
 source(here('R','load_data.R'))
 source(here('src','clean_data.R'))
+source(here('src','normalize_JNDs.R'))
 ```
 ```{r load data}
-JNDs <- load_data()
+results <- load_data()
 ```
 ```{r clean}
-JNDs <- clean_data(JNDs)
+results <- clean_data(results)
 ```
 ```{r normalize JNDs}
-JNDs <- JNDs %>%
-  # Select only relevant columns
-  select(-threshold_contrast, -LMS_background) %>%
-  
-  # Convert to wide-format: separate columns for high/low
-  spread(key = level, value = threshold_JND) %>%
-  
-  # Normalize by median of low_nominal across sessions per axis
-  group_by(participant, axis) %>%
-  mutate(high = high / median(low, na.rm = TRUE),
-         low = low / median(low, na.rm = TRUE)) %>%
-
-  # Convert back to tall: separate rows for high/low
-  gather(low,high,key='level',value='JND') %>%
-  mutate(level=factor(level,levels=c('low','high')))
+JNDs <- normalize_JNDs(results)
 ```
 ```{r median JNDs}
 median_JNDs <- JNDs %>%
