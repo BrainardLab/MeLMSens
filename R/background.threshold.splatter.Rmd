@@ -1,0 +1,33 @@
+```{r setup}
+library(tidyverse)
+library(here)
+source(here('R','clean_data.R'))
+source(here('R','splatter.R'))
+source(here('R','analyze_results.R'))
+source(here('R','normalize_JNDs.R'))
+source(here('R','results.plot.R'))
+```
+```{r load}
+thresholds_splatter <- read_csv(here('data','experimental','adapt.threshold.splatter.csv'))
+```
+```{r clean}
+thresholds_splatter <- thresholds_splatter %>%
+  rename_participants() %>%
+  group_by(participant, session, axis, level) %>%
+  mutate(contrastNominal= contrastNominalFit) %>%
+  select(LMSBackgroundNominal,LMSBackgroundMeasured,contrastNominal)
+```
+```{r predict contrast}
+JNDs <- predict_from_background_LMS(thresholds_splatter)
+```
+```{r}
+JNDs <- normalize_JNDs(JNDs)
+```
+```{r}
+medianJNDs <- median_JNDs(JNDs)
+```
+```{r}
+plot_JNDs(JNDs,medianJNDs) +
+    ylab("Predicted threshold (LMS JND, normalized") +
+    ggtitle("Predicted threshold, if background LMS splatter is considered")
+```
