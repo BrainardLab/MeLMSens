@@ -1,0 +1,9 @@
+[
+    {
+		"name": "OLApproach_Psychophysics",
+		"pathPlacement": "append",
+		"subfolder": ["toolbox","protocols","analysis"],
+		"type": "include",
+        "url": "/Users/joris/Documents/Projects/OLApproach_Psychophysics/configuration/OLApproach_Psychophysics.json"
+	}
+]
