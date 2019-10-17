@@ -1,0 +1,41 @@
+```{r setup}
+library(tidyverse)
+library(here)
+source(here('R','load_data.R'))
+source(here('src','clean_data.R'))
+source(here('src','normalize_JNDs.R'))
+```
+```{r load data}
+results <- load_data()
+```
+```{r clean}
+results <- clean_data(results)
+```
+```{r normalize JNDs}
+JNDs <- normalize_JNDs(results)
+```
+```{r median JNDs}
+median_JNDs <- JNDs %>%
+  group_by(participant, axis, level) %>%
+  summarise(median = median(JND),
+            SEM = 1.253*sd(JND, na.rm=TRUE)/sqrt(length(JND)),
+            MminSEM = median-SEM,
+            MplusSEM = median+SEM)
+```
+```{r plot JNDs}
+plot_normalized_JNDs <-  ggplot() +
+  # Individual sessions
+  geom_line(data = JNDs, aes(x = level, y = JND, group=session), alpha = .4) +
+
+  # Participatn median and SEM
+  geom_point(data = median_JNDs, aes(x = level, y = median), size = 1) +
+  geom_linerange(data = median_JNDs, aes(x = level, ymin = MminSEM, ymax = MplusSEM), size = 1) +
+  
+  # Markup
+  facet_grid(participant ~ axis) +
+  scale_y_continuous(breaks = seq(-1,7,1)) +
+  ylab("Normalized Flicker Threshold") +
+  xlab("Adaptation level") +
+  theme_bw()
+plot_normalized_JNDs
+```
