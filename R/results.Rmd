@@ -12,9 +12,13 @@ results <- load_data()
 ```
 ```{r clean}
 results <- clean_data(results)
+
 ```
 ```{r normalize JNDs}
 JNDs <- normalize_JNDs(results)
+```
+```{r filter}
+JNDs <- filter(JNDs,axis == 'Melanopsin')
 ```
 ```{r median JNDs}
 median_JNDs <- median_JNDs(JNDs)
