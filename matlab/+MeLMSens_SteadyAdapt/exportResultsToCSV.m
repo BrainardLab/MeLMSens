@@ -6,5 +6,5 @@ function exportResultsToCSV()
 results = MeLMSens_SteadyAdapt.dataManagement.functionForAll(@MeLMSens_SteadyAdapt.analyze.sessionResultsFromName);
 
 % Write to file
-writetable(results,fullfile(getpref('MeLMSens','dataDir','experimental'),'results.csv'));
+writetable(results,fullfile(getpref('MeLMSens','dataDir'),'experimental','adapt.results.csv'));
 end
