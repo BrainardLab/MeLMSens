@@ -2,8 +2,9 @@
 library(tidyverse)
 library(here)
 source(here('R','load_data.R'))
-source(here('src','clean_data.R'))
-source(here('src','normalize_JNDs.R'))
+source(here('R','clean_data.R'))
+source(here('R','normalize_JNDs.R'))
+source(here('R','analyze_results.R'))
 ```
 ```{r load data}
 results <- load_data()
@@ -15,12 +16,7 @@ results <- clean_data(results)
 JNDs <- normalize_JNDs(results)
 ```
 ```{r median JNDs}
-median_JNDs <- JNDs %>%
-  group_by(participant, axis, level) %>%
-  summarise(median = median(JND),
-            SEM = 1.253*sd(JND, na.rm=TRUE)/sqrt(length(JND)),
-            MminSEM = median-SEM,
-            MplusSEM = median+SEM)
+median_JNDs <- median_JNDs(JNDs)
 ```
 ```{r plot JNDs}
 plot_normalized_JNDs <-  ggplot() +
