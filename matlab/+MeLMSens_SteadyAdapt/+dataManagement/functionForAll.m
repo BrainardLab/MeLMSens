@@ -10,6 +10,8 @@ participants = MeLMSens_SteadyAdapt.dataManagement.listParticipants();
 
 for participant = participants
     participant = participant{:};
+
+    fprintf('Processing participant %s...\n',participant);
     
     % Get session names
     sessionNames = MeLMSens_SteadyAdapt.dataManagement.listSessions(participant);
@@ -18,6 +20,7 @@ for participant = participants
     for sessionName = sessionNames
         sessionName = sessionName{:};
 
+        fprintf('\tsession %s...',sessionName);
         % Execute
         if ~exist('output','var')
             output = fcn(participant, sessionName);
@@ -25,6 +28,8 @@ for participant = participants
             tmp = fcn(participant, sessionName);
             output = vertcat(output,tmp);
         end
+        
+        fprintf('done.\n');
     end
 end
 end
