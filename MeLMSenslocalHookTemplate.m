@@ -15,7 +15,7 @@ dir_dropbox = fullfile('/','Users',userID,'Dropbox (Aguirre-Brainard Lab)');
 rawDataDir = fullfile(dir_dropbox,'MELA_data','Experiments','OLApproach_Psychophysics');
 
 %% Define protocol names
-protocolNames = {'MeLMSens_SteadyAdapt'};
+protocolNames = {'MeLMSens_SteadyAdapt','MeLMSens_Pulse'};
 
 %% Protocol raw data dirs
 for protocol = protocolNames
