@@ -1,0 +1,63 @@
+```{r setup}
+library(tidyverse)
+library(here)
+```
+```{r load data}
+JNDs <- read_csv(here('data','results.csv'), na = c("", "NA", "NaN")) %>%
+  mutate(level = factor(level)) %>%
+  mutate(axis = factor(axis))
+```
+```{r clean}
+JNDs <- JNDs %>%
+  ungroup() %>%
+  # Reorder axis
+  mutate(axis = relevel(factor(axis),'Mel')) %>%
+  mutate(axis = recode_factor(axis, Mel = "Melanopsin", LMS = "Luminance")) %>%
+  
+  # Rename participants
+  mutate(participant = recode_factor(participant, 
+                                     HERO_GKA = "Participant 1", 
+                                     HERO_DHB = "Participant 2", 
+                                     HERO_JXV = "Participant 3")) %>%
+
+  group_by(participant, axis)
+```
+```{r normalize JNDs}
+JNDs <- JNDs %>%
+  # Convert to wide-format: separate columns for high/low
+  spread(key = level, value = threshold_JND) %>%
+  
+  # Normalize by median of low_nominal across sessions per axis
+  group_by(participant, axis) %>%
+  mutate(high = high / median(low, na.rm = TRUE),
+         low = low / median(low, na.rm = TRUE)) %>%
+
+  # Convert back to tall: separate rows for high/low
+  gather(low,high,key='level',value='JND') %>%
+  mutate(level=factor(level,levels=c('low','high')))
+```
+```{r median JNDs}
+median_JNDs <- JNDs %>%
+  group_by(participant, axis, level) %>%
+  summarise(median = median(JND),
+            SEM = 1.253*sd(JND, na.rm=TRUE)/sqrt(length(JND)),
+            MminSEM = median-SEM,
+            MplusSEM = median+SEM)
+```
+```{r plot JNDs}
+plot_normalized_JNDs <-  ggplot() +
+  # Individual sessions
+  geom_line(data = JNDs, aes(x = level, y = JND, group=session), alpha = .4) +
+
+  # Participatn median and SEM
+  geom_point(data = median_JNDs, aes(x = level, y = median), size = 1) +
+  geom_linerange(data = median_JNDs, aes(x = level, ymin = MminSEM, ymax = MplusSEM), size = 1) +
+  
+  # Markup
+  facet_grid(participant ~ axis) +
+  scale_y_continuous(breaks = seq(-1,7,1)) +
+  ylab("Normalized Flicker Threshold") +
+  xlab("Adaptation level") +
+  theme_bw()
+plot_normalized_JNDs
+```
