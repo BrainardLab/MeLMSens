@@ -1,11 +1,10 @@
 ```{r setup}
 library(tidyverse)
 library(here)
+source(here('R','load_data.R'))
 ```
 ```{r load data}
-JNDs <- read_csv(here('data','results.csv'), na = c("", "NA", "NaN")) %>%
-  mutate(level = factor(level)) %>%
-  mutate(axis = factor(axis))
+JNDs <- load_data()
 ```
 ```{r clean}
 JNDs <- JNDs %>%
