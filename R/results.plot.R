@@ -13,6 +13,8 @@ plot_JNDs <- function (JNDs, medianJNDs) {
     # Markup
     facet_grid(~ participant) +
     scale_y_continuous(breaks = seq(-1,7,1), limits = c(-1,5)) +
+    geom_hline(yintercept = 1, linetype='solid') +
+    geom_hline(yintercept = 4.5, linetype='dashed') +    
     ylab("Normalized Flicker Threshold") +
     xlab("Adaptation level") +
     theme_bw()
