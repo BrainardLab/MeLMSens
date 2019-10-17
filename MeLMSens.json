@@ -1,9 +1,17 @@
 [
     {
 		"name": "OLApproach_Psychophysics",
-		"pathPlacement": "append",
-		"subfolder": ["toolbox","protocols","analysis"],
 		"type": "include",
-        "url": "/Users/joris/Documents/Projects/OLApproach_Psychophysics/configuration/OLApproach_Psychophysics.json"
+        "url": "/Users/joris/Documents/Projects/OLApproach_Psychophysics/configuration/OLApproach_Psychophysics.json",
+		"pathPlacement": "append",
+		"subfolder": ["toolbox","protocols","analysis"]
+	},
+    {
+		"name": "MeLMSens",
+		"type": "git",
+        "url": "https://github.com/JorisVincent/MeLMSens",
+		"pathPlacement": "append",
+		"subfolder": ["Matlab"],
+		"localHookTemplate": "configuration/OLApproach_PsychophysicsLocalHookTemplate.m"
 	}
 ]
