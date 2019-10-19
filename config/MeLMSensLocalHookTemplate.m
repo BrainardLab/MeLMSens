@@ -9,7 +9,12 @@ function MeLMSensLocalHook
 % Get Dropbox dir
 [~, userID] = system('whoami');
 userID = strtrim(userID);
-dir_dropbox = fullfile('/','Users',userID,'Dropbox (Aguirre-Brainard Lab)'); 
+switch (userID)
+    case 'dhb'
+        dir_dropbox = fullfile('/','Users1','Dropbox (Aguirre-Brainard Lab)'); 
+    otherwise
+        dir_dropbox = fullfile('/','Users',userID,'Dropbox (Aguirre-Brainard Lab)');
+end
 
 % Set raw data dir
 rawDataDir = fullfile(dir_dropbox,'MELA_data','Experiments','OLApproach_Psychophysics');
