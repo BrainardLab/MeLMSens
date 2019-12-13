@@ -5,13 +5,15 @@ To do:
 - Arrange for the figures to be copied to or created within the paper DropBox directory
 
 MATLAB operations
-1) `exportAllResultsToCSV` - This reads the raw data from DropBox and saves processed data into the local (within this repo) data directory
-2) Make individual figures:
+1) Install ToolboxToolbox (github/toolboxhub/ToolboxToolbox.
+2) Check out this project into the ToolboxToolbox projects directory, and also github/BrainardLab/OLApproach_Psychophysics.
+3) Run tbUseProject('MeLMSens');
+4) `exportAllResultsToCSV` - This reads the raw data from DropBox and saves processed data into the local (within this repo) data directory
+5) Make individual figures:
 	`MeLMSens_SteadyAdapt.schematic.trialSchematic`
 	`MeLMSens_SteadyAdapt.schematic.sessionSchematic`
 	`MeLMSens_Pulse.schematic.trialSchematic`
 	`MeLMSens_Pulse.schematic.sessionSchematic`
-
 
 R operations
 1) Install R if not already present (e.g., http://cran.wustl.edu/bin/macosx/). Use latest version from R-project.org
