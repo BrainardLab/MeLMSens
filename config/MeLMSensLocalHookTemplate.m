@@ -39,3 +39,10 @@ end
 if ~exist(fullfile(projectDir,'figs'),'dir')
     mkdir(fullfile(projectDir,'figs'));
 end
+
+%% Add what we need for OLApproach_Psychophysics to path
+olApproachPsychoPath = tbLocateProject('OLApproach_Psychophysics');
+if (isempty(olApproachPsychoPath))
+    error('Need to check out OLApproach_Psychophysics into your TbTb projects directory');
+end
+addpath(genpath(fullfile(olApproachPsychoPath,'toolbox')),'-end');

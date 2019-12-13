@@ -90,19 +90,7 @@
 		"update": "",
 		"url": "https:\/\/github.com\/gkaguirrelab\/PupilAnalysisToolbox.git"
 	},
-    {
-		"flavor": "",
-		"hook": "",
-		"importance": "",
-		"localHookTemplate": "configuration/OLApproach_PsychophysicsLocalHookTemplate.m",
-		"name": "OLApproach_Psychophysics",
-		"pathPlacement": "append",
-		"subfolder": "code",
-		"toolboxRoot": "",
-		"type": "git",
-		"update": "",
-		"url": ""
-	},
+    
     {
         "name": "Palamedes_1.8.2",
         "pathPlacement": "append",
