@@ -46,3 +46,4 @@ if (isempty(olApproachPsychoPath))
     error('Need to check out OLApproach_Psychophysics into your TbTb projects directory');
 end
 addpath(genpath(fullfile(olApproachPsychoPath,'toolbox')),'-end');
+addpath(genpath(fullfile(olApproachPsychoPath,'protocols')),'-end');
