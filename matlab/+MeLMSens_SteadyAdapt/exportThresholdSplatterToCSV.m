@@ -8,5 +8,5 @@ fprintf('Exporting SteadyAdapt threshold splatter...\n');
 results = MeLMSens_SteadyAdapt.dataManagement.functionForAll(@MeLMSens_SteadyAdapt.splatter.thresholdSessionFromName);
 
 % Write to file
-writetable(results,fullfile(getpref('MeLMSens','dataDir'),'experimental','adapt.threshold.splatter.csv'));
+writetable(results,fullfile(getpref('MeLMSens','dataDir'),'experimental','adapt.thresholds.splatter.csv'));
 end
