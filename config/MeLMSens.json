@@ -101,7 +101,7 @@
 		"type": "git",
         "url": "https://github.com/JorisVincent/MeLMSens",
 		"pathPlacement": "append",
-		"subfolder": ["Matlab"],
+		"subfolder": ["matlab"],
 		"localHookTemplate": "config/MeLMSensLocalHookTemplate.m"
 	}
 ]
