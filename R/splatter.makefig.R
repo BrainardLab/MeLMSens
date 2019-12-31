@@ -8,7 +8,7 @@ source(here('R','normalize_JNDs.R'))
 source(here('R','results.plot.R'))
 
 make_figure_splatter_threshold_background_adapt <- function () {
-  thresholds_splatter <- read_csv(here('data','experimental','adapt.threshold.splatter.csv'))
+  thresholds_splatter <- read_csv(here('data','experimental','adapt.thresholds.splatter.csv'))
   
   # Clean
   thresholds_splatter <- thresholds_splatter %>%
