@@ -2,7 +2,6 @@
 library(tidyverse)
 library(here)
 source(here('R','clean_data.R'))
-source(here('R','splatter.R'))
 source(here('R','analyze_results.R'))
 source(here('R','normalize_JNDs.R'))
 source(here('R','results.plot.R'))
@@ -18,7 +17,20 @@ thresholds_splatter <- thresholds_splatter %>%
   select(LMSBackgroundNominal,LMSBackgroundMeasured,contrastNominal)
 ```
 ```{r predict contrast}
-JNDs <- predict_from_background_LMS(thresholds_splatter)
+JNDs <- thresholds_splatter %>%
+    # Convert to wide-format: separate columns for high/low
+    select(contrastNominal) %>%
+    spread(key = level, value = contrastNominal) %>%
+    
+    # Calculate contrast predicted:
+    # Equate for contrast nominal
+    mutate(high = low) %>%
+    gather(low,high,key='level',value='LMScontrastPredicted') %>%
+    mutate(level=factor(level,levels=c('low','high'))) %>%
+    right_join(thresholds_splatter) %>%
+    
+    # Calculate JND
+    mutate(threshold_JND = LMScontrastPredicted * LMSBackgroundNominal)
 ```
 ```{r}
 JNDs <- normalize_JNDs(JNDs)
