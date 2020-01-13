@@ -7,7 +7,7 @@ source(here('R','normalize_JNDs.R'))
 source(here('R','results.plot.R'))
 ```
 ```{r load}
-thresholds_splatter <- read_csv(here('data','experimental','adapt.threshold.splatter.csv'))
+thresholds_splatter <- read_csv(here('data','experimental','adapt.thresholds.splatter.csv'))
 ```
 ```{r clean}
 thresholds_splatter <- thresholds_splatter %>%
