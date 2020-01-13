@@ -14,7 +14,7 @@ thresholds_splatter <- thresholds_splatter %>%
   rename_participants() %>%
   group_by(participant, session, axis, level) %>%
   mutate(contrastNominal= contrastNominalFit) %>%
-  select(LMSBackgroundNominal,LMSBackgroundMeasured,contrastNominal)
+  select(LMSBackgroundMeasured,contrastNominal)
 ```
 ```{r predict contrast}
 JNDs <- thresholds_splatter %>%
@@ -30,7 +30,7 @@ JNDs <- thresholds_splatter %>%
     right_join(thresholds_splatter) %>%
     
     # Calculate JND
-    mutate(threshold_JND = LMScontrastPredicted * LMSBackgroundNominal)
+    mutate(threshold_JND = LMScontrastPredicted * LMSBackgroundMeasured)
 ```
 ```{r}
 JNDs <- normalize_JNDs(JNDs)
