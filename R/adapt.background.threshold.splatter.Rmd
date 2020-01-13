@@ -15,8 +15,10 @@ This dataset of thresholds in the Steady Adaptation experiment contains the colu
 `contrastNominalQuick`,`contrastNominalFit`: two slightly different versions the nominal contrast at threshold
 `LMSBackgroundNominal`: nominal LMS content of the background spectrum
 `JNDNominalQuick`,`JNDNominalFit`: JNDs corresponding to the nominal contrasts
-`contrastMeasurdQuick`,`JNDMeasuredQuick`: measured contrast, JND, at threshold
+`contrastMeasuredQuick`,`JNDMeasuredQuick`: measured contrast, JND, at threshold
 `LMSBackgroundMeasured`: measured LMS content of the background spectrum
+`JNDMeasuredQuick`: JND corresponding to the measured quick contrast and background
+`ratioContrastMeasuredNominal`: ratio between nominal contrast, and measured contrast
 `LMMeasured`: measured L-M contrast of the flicker on the background.
 ```{r load}
 thresholds_splatter <- read_csv(here('data','experimental','adapt.thresholds.splatter.csv'))
