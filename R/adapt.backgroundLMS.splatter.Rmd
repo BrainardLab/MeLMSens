@@ -29,8 +29,30 @@ For the current analysis, need to group by the acquisition metadata, and need th
 thresholds_splatter <- thresholds_splatter %>%
   rename_participants() %>%
   group_by(participant, session, axis, level) %>%
-  mutate(contrastNominal= contrastNominalFit) %>%
-  select(LMSBackgroundMeasured,contrastNominal)
+  mutate(contrastNominal= contrastNominalFit)
+```
+
+# Visualize splatter
+Visualize the measured LMS content of the background stimulus (`LMSBackgroundMeasured`), for separate participants, conditions, sessions.
+```{r}
+backgroundLMS <- thresholds_splatter %>%
+  select(LMSBackgroundMeasured, LMSBackgroundNominal)
+```
+## Plot the background LMS splatter
+```{r visualize background LMS splatter}
+ggplot(data = backgroundLMS) +
+  # Setup mapping: melanopic level on horizontal, LMS content on vertical
+  aes(x = level, y = LMSBackgroundMeasured) +
+  # Separate panels for participants
+  facet_grid(~ participant) +
+  
+  # Plot each session
+  geom_line(aes(group = session), alpha = .6) +
+  # Labeling
+  ylab("Background LMS content") +
+  xlab("Melanopic condition") +
+  ggtitle("LMS splatter of backgrounds") +
+  theme_bw()
 ```
 # Predict JNDs
 Rotate dataframe to wide-format: separate columns for `high` and `low` nominal contrast at threshold per session. Set `high` nominal contrast at threshold equal to `low` nominal contrast at threshold. Rotate back to tall-format, with separate rows for low and high melanopic conditions indicated by columns `level` and `LMScontrastPredicted` for the predicted nominal contrast. Calculate `threshold_JND`, multiplying `LMScontrastPredicted` by `LMSBackgroundMeasured`.
