@@ -77,8 +77,7 @@ JNDs <- threshold_contrasts %>%
 Normalize the JNDs by the median JND on the low melanopic background, calculate the `median_JNDs` per participant (after normalization), and plot.
 ```{r plot in standard format}
 JNDs <- normalize_JNDs(JNDs)
-medianJNDs <- median_JNDs(JNDs)
-plot_JNDs(JNDs,medianJNDs) +
+plot_JNDs(JNDs) +
     ylab("Predicted threshold (LMS JND, normalized") +
     ggtitle("Predicted threshold, if flicker LMS splatter is considered")
 ```
