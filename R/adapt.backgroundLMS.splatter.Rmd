@@ -38,11 +38,16 @@ Visualize the measured LMS content of the background stimulus (`LMSBackgroundMea
 backgroundLMS <- thresholds_splatter %>%
   select(LMSBackgroundMeasured, LMSBackgroundNominal)
 ```
+Normalize by expressing as proportion of nominal LMS content.
+```{r normalize background LMS splatter}
+backgroundLMS <- backgroundLMS %>%
+  mutate(LMSBackgroundMeasured_Relative = LMSBackgroundMeasured / LMSBackgroundNominal)
+```
 ## Plot the background LMS splatter
 ```{r visualize background LMS splatter}
 ggplot(data = backgroundLMS) +
   # Setup mapping: melanopic level on horizontal, LMS content on vertical
-  aes(x = level, y = LMSBackgroundMeasured) +
+  aes(x = level, y = LMSBackgroundMeasured_Relative) +
   # Separate panels for participants
   facet_grid(~ participant) +
   
@@ -55,7 +60,8 @@ ggplot(data = backgroundLMS) +
                geom = "linerange", aes(group = 1), size =1) +
   
   # Labeling
-  ylab("Background LMS content") +
+  geom_hline(yintercept = 1, linetype='solid') +
+  ylab("Background LMS content (relative to nominal)") +
   xlab("Melanopic condition") +
   ggtitle("LMS splatter of backgrounds") +
   theme_bw()
