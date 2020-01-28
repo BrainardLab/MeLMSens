@@ -48,6 +48,12 @@ ggplot(data = backgroundLMS) +
   
   # Plot each session
   geom_line(aes(group = session), alpha = .6) +
+  # Plot median for participant
+  stat_summary(fun.y = median, geom = "point", aes(group=1), size =1) +
+  stat_summary(fun.y = median, geom = "line", aes(group=1), size =1) +
+  stat_summary(fun.y = median, fun.ymax = median_plus_sem, fun.ymin = median_minus_sem,
+               geom = "linerange", aes(group = 1), size =1) +
+  
   # Labeling
   ylab("Background LMS content") +
   xlab("Melanopic condition") +
