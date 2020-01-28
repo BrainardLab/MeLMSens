@@ -31,6 +31,24 @@ thresholds_splatter <- thresholds_splatter %>%
   group_by(participant, session, axis, level) %>%
   mutate(contrastNominal = contrastNominalFit)
 ```
+
+# Plot the flicker LMS splatter
+```{r visualize flicker LMS splatter}
+ggplot(data = thresholds_splatter) +
+  # Setup mapping: melanopic level on horizontal, LMS content on vertical
+  aes(x = level, y = contrastMeasuredQuick) +
+  # Separate panels for participants
+  facet_grid(~ participant) +
+  
+  # Plot each session
+  geom_line(aes(group = session), alpha = .6) +
+  
+  # Labeling
+  ylab("Measured flicker LMS contrast") +
+  xlab("Melanopic condition") +
+  ggtitle("LMS splatter of flicker") +
+  theme_bw()
+```
 # Predict JNDs
 
 ```{r}
