@@ -22,7 +22,8 @@ This dataset of thresholds in the Steady Adaptation experiment contains the colu
 `LMMeasured`: measured L-M contrast of the flicker on the background, at nominal threshold LMS contrast.
 ```{r load}
 thresholds_splatter <- read_csv(here('data','experimental','adapt.thresholds.splatter.csv')) %>%
-  mutate(contrastNominal = contrastNominalFit)  
+  mutate(contrastNominal = contrastNominalFit,
+         level = fct_relevel(level, "low","high"))  
 ```
 # Cleaning
 For the current analysis, need to group by the acquisition metadata, and need the nominal LMS contrast (`contrastNominal`) and the measured L-M contrast of the flicker stimulus at nominal threshold LMS contrast (`LMMeasured`). Also need the `LMSBackgroundNominal` to convert to JNDs. We also want to rename the participants.
