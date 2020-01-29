@@ -31,13 +31,16 @@ thresholds_splatter <- thresholds_splatter %>%
   rename_participants() %>%
   group_by(participant, session, axis, level)
 ```
-
+```{r calculate L-M/(L+M+S)}
+thresholds_splatter <- thresholds_splatter %>%
+  mutate(LMoverLMS = LMMeasured/contrastMeasuredQuick)
+```
 # Plot the flicker L-M splatter
 `LMMeasured`: measured L-M contrast of the flicker on the background, at nominal threshold LMS contrast.
 ```{r visualize flicker LMS splatter}
 ggplot(data = thresholds_splatter) +
   # Setup mapping: melanopic level on horizontal, L-M contrast on vertical
-  aes(x = level, y = LMMeasured) +
+  aes(x = level, y = LMoverLMS) +
   # Separate panels for participants
   facet_grid(~ participant) +
   
@@ -51,7 +54,7 @@ ggplot(data = thresholds_splatter) +
   
   # Labeling
   geom_hline(yintercept = 0, linetype='solid') +
-  ylab("Measured flicker L-M contrast") +
+  ylab("Measured flicker (L-M)/(L+M+S) contrast") +
   xlab("Melanopic condition") +
   ggtitle("L-M splatter of flicker at thresholds") +
   theme_bw()
