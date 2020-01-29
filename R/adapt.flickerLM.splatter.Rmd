@@ -1,0 +1,58 @@
+---
+title: "Effect of flicker L-M splatter on Adapt JNDs"
+---
+```{r setup}
+library(tidyverse)
+library(here)
+source(here('R','clean_data.R'))
+source(here('R','analyze_results.R'))
+source(here('R','normalize_JNDs.R'))
+source(here('R','results.plot.R'))
+```
+# Load in data
+This dataset of thresholds in the Steady Adaptation experiment contains the columns:
+`participant`,`session`,`axis`,`level`: meta info for each acquisition
+`contrastNominalQuick`,`contrastNominalFit`: two slightly different versions the nominal contrast at threshold
+`LMSBackgroundNominal`: nominal LMS content of the background spectrum
+`JNDNominalQuick`,`JNDNominalFit`: JNDs corresponding to the nominal contrasts
+`contrastMeasuredQuick`,`JNDMeasuredQuick`: measured contrast, JND, at threshold
+`LMSBackgroundMeasured`: measured LMS content of the background spectrum
+`JNDMeasuredQuick`: JND corresponding to the measured quick contrast and background
+`ratioContrastMeasuredNominal`: ratio between nominal contrast, and measured contrast
+`LMMeasured`: measured L-M contrast of the flicker on the background, at nominal threshold LMS contrast.
+```{r load}
+thresholds_splatter <- read_csv(here('data','experimental','adapt.thresholds.splatter.csv')) %>%
+  mutate(contrastNominal = contrastNominalFit)  
+```
+# Cleaning
+For the current analysis, need to group by the acquisition metadata, and need the nominal LMS contrast (`contrastNominal`) and the measured L-M contrast of the flicker stimulus at nominal threshold LMS contrast (`LMMeasured`). Also need the `LMSBackgroundNominal` to convert to JNDs. We also want to rename the participants.
+```{r clean}
+thresholds_splatter <- thresholds_splatter %>%
+  rename_participants() %>%
+  group_by(participant, session, axis, level)
+```
+
+# Plot the flicker L-M splatter
+`LMMeasured`: measured L-M contrast of the flicker on the background, at nominal threshold LMS contrast.
+```{r visualize flicker LMS splatter}
+ggplot(data = thresholds_splatter) +
+  # Setup mapping: melanopic level on horizontal, L-M contrast on vertical
+  aes(x = level, y = LMMeasured) +
+  # Separate panels for participants
+  facet_grid(~ participant) +
+  
+  # Plot each session
+  geom_line(aes(group = session), alpha = .6) +
+  # Plot median for participant
+  stat_summary(fun.y = median, geom = "point", aes(group=1), size =1) +
+  stat_summary(fun.y = median, geom = "line", aes(group=1), size =1) +
+  stat_summary(fun.y = median, fun.ymax = median_plus_sem, fun.ymin = median_minus_sem,
+               geom = "linerange", aes(group = 1), size =1) +  
+  
+  # Labeling
+  geom_hline(yintercept = 0, linetype='solid') +
+  ylab("Measured flicker L-M contrast") +
+  xlab("Melanopic condition") +
+  ggtitle("L-M splatter of flicker at thresholds") +
+  theme_bw()
+```
