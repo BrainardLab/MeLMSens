@@ -61,7 +61,7 @@ ggplot(data = thresholds_splatter) +
   geom_hline(yintercept = 1, linetype='solid') +
   ylab("Measured flicker LMS contrast") +
   xlab("Melanopic condition") +
-  ggtitle("LMS splatter of flicker") +
+  ggtitle("LMS splatter of flicker (Adapt)") +
   theme_bw()
 ```
 # Predict JNDs
@@ -105,5 +105,5 @@ Normalize the JNDs by the median JND on the low melanopic background, calculate 
 JNDs <- normalize_JNDs(JNDs)
 plot_JNDs(JNDs) +
     ylab("Predicted threshold (LMS JND, normalized") +
-    ggtitle("Predicted threshold, if flicker LMS splatter is considered")
+    ggtitle("Predicted threshold, if flicker LMS splatter is considered (Adapt)")
 ```

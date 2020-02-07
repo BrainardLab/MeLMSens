@@ -65,7 +65,7 @@ ggplot(data = backgroundLMS) +
   geom_hline(yintercept = 1, linetype='solid') +
   ylab("Background LMS content (relative to nominal)") +
   xlab("Melanopic condition") +
-  ggtitle("LMS splatter of backgrounds") +
+  ggtitle("LMS splatter of backgrounds (Adapt)") +
   theme_bw()
 ```
 # Predict JNDs
@@ -92,5 +92,5 @@ Normalize the JNDs by the median JND on the low melanopic background, calculate 
 JNDs <- normalize_JNDs(JNDs)
 plot_JNDs(JNDs) +
     ylab("Predicted threshold (LMS JND, normalized") +
-    ggtitle("Predicted threshold, if background LMS splatter is considered")
+    ggtitle("Predicted threshold, if background LMS splatter is considered (Adapt)")
 ```
