@@ -1,5 +1,5 @@
 ---
-title: "Effect of flicker LMS splatter on Adapt JNDs (Pulse1)"
+title: "Effect of flicker LMS splatter on JNDs (Pulse1)"
 ---
 ```{r setup}
 library(tidyverse)
