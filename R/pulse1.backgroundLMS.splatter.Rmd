@@ -1,0 +1,102 @@
+---
+title: "Effect of background LMS splatter on JNDs (Pulse1)"
+---
+
+Predicting JNDs as a function of the LMS content of the background spectra, under null-hypothesis that thresholds do not change.
+
+Assume that nominal contrast at threshold on the high-melanopic pedestal is the same as nominal contrast on the low-melanopic background; what are the JNDs calculated from this nominal contrast and the measured LMS content of each background?
+```{r setup}
+library(tidyverse)
+library(here)
+source(here('R','clean_data.R'))
+source(here('R','analyze_results.R'))
+source(here('R','normalize_JNDs.R'))
+source(here('R','results.plot.R'))
+```
+# Load in data
+This dataset of thresholds in the Pulse1 experiment contains the columns:
+`participant`,`session`,`axis`,`level`: meta info for each acquisition
+`contrastNominal`: the nominal contrast at threshold
+`LMSBackgroundNominal`: nominal LMS content of the background spectrum
+`JNDNominal`: JND corresponding to the nominal contrast
+`contrastMeasured`,`JNDMeasured`: measured contrast, JND, at threshold
+`LMSBackgroundMeasured`: measured LMS content of the background spectrum
+`JNDMeasured`: JND corresponding to the measured contrast and background
+`ratioContrastMeasuredNominal`: ratio between nominal contrast, and measured contrast
+`LMMeasured`: measured L-M contrast of the flicker on the background.
+```{r load}
+thresholds_splatter <- read_csv(here('data','experimental','pulse.thresholds.splatter.csv')) %>%
+  mutate(JNDMeasured = JNDMeasuredQuick) %>%
+  select(-JNDNominalFit, -JNDMeasuredQuick) %>%
+  mutate(level = fct_relevel(level, "low","high"))  
+```
+# Cleaning
+For the current analysis, need to group by the acquisition metadata, and need the nominal contrast (`contrastNominal`) and the measured LMS content of the background stimulus (`LMSBackgroundMeasured`). We also want to rename the participants.
+```{r clean}
+thresholds_splatter <- thresholds_splatter %>%
+  rename_participants() %>%
+  group_by(participant, session, axis, level)
+```
+
+# Visualize splatter
+Visualize the measured LMS content of the background stimulus (`LMSBackgroundMeasured`), for separate participants, conditions, sessions.
+```{r}
+backgroundLMS <- thresholds_splatter %>%
+  select(LMSBackgroundMeasured, LMSBackgroundNominal)
+```
+Normalize by expressing as proportion of nominal LMS content.
+```{r normalize background LMS splatter}
+backgroundLMS <- backgroundLMS %>%
+  mutate(LMSBackgroundMeasured_Relative = LMSBackgroundMeasured / LMSBackgroundNominal)
+```
+## Plot the background LMS splatter
+```{r visualize background LMS splatter}
+ggplot(data = backgroundLMS) +
+  # Setup mapping: melanopic level on horizontal, LMS content on vertical
+  aes(x = level, y = LMSBackgroundMeasured_Relative) +
+  # Separate panels for participants
+  facet_grid(~ participant) +
+  
+  # Plot each session
+  geom_line(aes(group = session), alpha = .6) +
+  # Plot median for participant
+  stat_summary(fun.y = median, geom = "point", aes(group=1), size =1) +
+  stat_summary(fun.y = median, geom = "line", aes(group=1), size =1) +
+  stat_summary(fun.y = median, fun.ymax = median_plus_sem, fun.ymin = median_minus_sem,
+               geom = "linerange", aes(group = 1), size =1) +
+  
+  # Labeling
+  geom_hline(yintercept = 1, linetype='solid') +
+  ylab("Background LMS content (relative to nominal)") +
+  xlab("Melanopic condition") +
+  ggtitle("LMS splatter of backgrounds (Pulse1)") +
+  theme_bw()
+ggsave(here('figs','S4A.splatter.pulse.backgroundLMS.splatter.pdf'), width = 10, height = 5)
+```
+# Predict JNDs
+Rotate dataframe to wide-format: separate columns for `high` and `low` nominal contrast at threshold per session. Set `high` nominal contrast at threshold equal to `low` nominal contrast at threshold. Rotate back to tall-format, with separate rows for low and high melanopic conditions indicated by columns `level` and `LMScontrastPredicted` for the predicted nominal contrast. Calculate `threshold_JND`, multiplying `LMScontrastPredicted` by `LMSBackgroundMeasured`.
+```{r predict JNDs}
+JNDs <- thresholds_splatter %>%
+    # Convert to wide-format: separate columns for high/low
+    select(contrastNominal) %>%
+    spread(key = level, value = contrastNominal) %>%
+    
+    # Calculate contrast predicted:
+    # Equate for contrast nominal
+    mutate(high = low) %>%
+    gather(low,high,key='level',value='LMScontrastPredicted') %>%
+    mutate(level=factor(level,levels=c('low','high'))) %>%
+    right_join(thresholds_splatter) %>%
+    
+    # Calculate JND
+    mutate(threshold_JND = LMScontrastPredicted * LMSBackgroundMeasured)
+```
+## Plot the predicted JNDs in standard format
+Normalize the JNDs by the median JND on the low melanopic background, calculate the `median_JNDs` per participant (after normalization), and plot.
+```{r plot in standard format}
+JNDs <- normalize_JNDs(JNDs)
+plot_JNDs(JNDs) +
+    ylab("Predicted threshold (LMS JND, normalized") +
+    ggtitle("Predicted threshold, if background LMS splatter is considered (Pulse1)")
+ggsave(here('figs','S4B.JNDs.pulse.backgroundLMS.splatter.pdf'), width = 10, height = 5)
+```

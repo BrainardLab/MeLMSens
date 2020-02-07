@@ -16,7 +16,7 @@ plot_JNDs <- function (JNDs) {
                  geom = "linerange", aes(group = 1), size =1) +
     
     # Markup
-    scale_y_continuous(breaks = seq(-1,7,1), limits = c(-1,5)) +
+    scale_y_continuous(breaks = seq(-2,7,1), limits = c(-3,7)) +
     geom_hline(yintercept = 1, linetype='solid') +
     geom_hline(yintercept = 4.5, linetype='dashed') +    
     ylab("Normalized Flicker Threshold") +
