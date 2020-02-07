@@ -67,6 +67,7 @@ ggplot(data = backgroundLMS) +
   xlab("Melanopic condition") +
   ggtitle("LMS splatter of backgrounds (Adapt)") +
   theme_bw()
+ggsave(here('figs','S1A.splatter.adapt.backgroundLMS.splatter.pdf'), width = 10, height = 5)
 ```
 # Predict JNDs
 Rotate dataframe to wide-format: separate columns for `high` and `low` nominal contrast at threshold per session. Set `high` nominal contrast at threshold equal to `low` nominal contrast at threshold. Rotate back to tall-format, with separate rows for low and high melanopic conditions indicated by columns `level` and `LMScontrastPredicted` for the predicted nominal contrast. Calculate `threshold_JND`, multiplying `LMScontrastPredicted` by `LMSBackgroundMeasured`.
@@ -93,4 +94,5 @@ JNDs <- normalize_JNDs(JNDs)
 plot_JNDs(JNDs) +
     ylab("Predicted threshold (LMS JND, normalized") +
     ggtitle("Predicted threshold, if background LMS splatter is considered (Adapt)")
+ggsave(here('figs','S1B.JNDs.adapt.backgroundLMS.splatter.pdf'), width = 10, height = 5)
 ```

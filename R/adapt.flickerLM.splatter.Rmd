@@ -60,6 +60,7 @@ ggplot(data = thresholds_splatter) +
   xlab("Melanopic condition") +
   ggtitle("L-M splatter of flicker at thresholds (Adapt)") +
   theme_bw()
+ggsave(here('figs','S3A.splatter.adapt.flickerLM.splatter.pdf'), width = 10, height = 5)
 ```
 # Predict JNDs
 If L-M contrast detection is the mechanism setting thresholds in the current experiment, what would the predcited JNDs be? Assume (absolute) `LMMeasured` at threshold is constant across melanopic conditions. (absolute) `LMMeasured` related to nominal LMS contrast by `LMoverLMsnominal`, so predict nominal LMS contrast at threshold from that. Multiply predicted LMS contrast by background LMS content to predict JND.
@@ -106,4 +107,5 @@ JNDs <- normalize_JNDs(JNDs)
 plot_JNDs(JNDs) +
     ylab("Predicted threshold (LMS JND, normalized") +
     ggtitle("Predicted threshold, if flicker LMS splatter is considered (Adapt)")
+ggsave(here('figs','S3B.JNDs.adapt.flickerLM.splatter.pdf'), width = 10, height = 5)
 ```
