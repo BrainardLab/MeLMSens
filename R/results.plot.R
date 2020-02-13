@@ -1,18 +1,22 @@
 library(ggplot2)
+source(here('R','analyze_results.R'))
 
-plot_JNDs <- function (JNDs, medianJNDs) {
-  p <-  ggplot() +
+plot_JNDs <- function (JNDs) {
+  p <-  ggplot(data = JNDs) +
+    aes(x = level, y = JND, group=session) +
+    facet_grid(~ participant) +
+  
     # Individual sessions
-    geom_line(data = JNDs, aes(x = level, y = JND, group=session), alpha = .7) +
+    geom_line(alpha = .7) +
     
-    # Participant median and SEM
-    geom_point(data = medianJNDs, aes(x = level, y = median), size = 1) +
-    geom_line(data = medianJNDs, aes(x = level, y = median, group = 1), size =1) +
-    geom_linerange(data = medianJNDs, aes(x = level, ymin = MminSEM, ymax = MplusSEM), size = 1) +
+    # Plot median for participant
+    stat_summary(fun.y = median, geom = "point", aes(group=1), size =1) +
+    stat_summary(fun.y = median, geom = "line", aes(group=1), size =1) +
+    stat_summary(fun.y = median, fun.ymax = median_plus_sem, fun.ymin = median_minus_sem,
+                 geom = "linerange", aes(group = 1), size =1) +
     
     # Markup
-    facet_grid(~ participant) +
-    scale_y_continuous(breaks = seq(-1,7,1), limits = c(-1,5)) +
+    scale_y_continuous(breaks = seq(-2,7,1), limits = c(-3,7)) +
     geom_hline(yintercept = 1, linetype='solid') +
     geom_hline(yintercept = 4.5, linetype='dashed') +    
     ylab("Normalized Flicker Threshold") +

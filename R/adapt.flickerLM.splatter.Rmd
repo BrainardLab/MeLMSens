@@ -1,0 +1,111 @@
+---
+title: "Effect of flicker L-M splatter on Adapt JNDs"
+---
+```{r setup}
+library(tidyverse)
+library(here)
+source(here('R','clean_data.R'))
+source(here('R','analyze_results.R'))
+source(here('R','normalize_JNDs.R'))
+source(here('R','results.plot.R'))
+```
+# Load in data
+This dataset of thresholds in the Steady Adaptation experiment contains the columns:
+`participant`,`session`,`axis`,`level`: meta info for each acquisition
+`contrastNominalQuick`,`contrastNominalFit`: two slightly different versions the nominal contrast at threshold
+`LMSBackgroundNominal`: nominal LMS content of the background spectrum
+`JNDNominalQuick`,`JNDNominalFit`: JNDs corresponding to the nominal contrasts
+`contrastMeasuredQuick`,`JNDMeasuredQuick`: measured contrast, JND, at threshold
+`LMSBackgroundMeasured`: measured LMS content of the background spectrum
+`JNDMeasuredQuick`: JND corresponding to the measured quick contrast and background
+`ratioContrastMeasuredNominal`: ratio between nominal contrast, and measured contrast
+`LMMeasured`: measured L-M contrast of the flicker on the background, at nominal threshold LMS contrast.
+```{r load}
+thresholds_splatter <- read_csv(here('data','experimental','adapt.thresholds.splatter.csv')) %>%
+  mutate(contrastNominal = contrastNominalFit,
+         level = fct_relevel(level, "low","high"))  
+```
+# Cleaning
+For the current analysis, need to group by the acquisition metadata, and need the nominal LMS contrast (`contrastNominal`) and the measured L-M contrast of the flicker stimulus at nominal threshold LMS contrast (`LMMeasured`). Also need the `LMSBackgroundNominal` to convert to JNDs. We also want to rename the participants.
+```{r clean}
+thresholds_splatter <- thresholds_splatter %>%
+  rename_participants() %>%
+  group_by(participant, session, axis, level)
+```
+```{r calculate L-M/(L+M+S)}
+thresholds_splatter <- thresholds_splatter %>%
+  mutate(LMoverLMSmeasured = LMMeasured/contrastMeasuredQuick,
+         LMoverLMSnominal = LMMeasured/contrastNominal)
+```
+# Plot the flicker L-M splatter
+`LMMeasured`: measured L-M contrast of the flicker on the background, at nominal threshold LMS contrast.
+```{r visualize flicker LMS splatter}
+ggplot(data = thresholds_splatter) +
+  # Setup mapping: melanopic level on horizontal, L-M contrast on vertical
+  aes(x = level, y = LMoverLMSmeasured) +
+  # Separate panels for participants
+  facet_grid(~ participant) +
+  
+  # Plot each session
+  geom_line(aes(group = session), alpha = .6) +
+  # Plot median for participant
+  stat_summary(fun.y = median, geom = "point", aes(group=1), size =1) +
+  stat_summary(fun.y = median, geom = "line", aes(group=1), size =1) +
+  stat_summary(fun.y = median, fun.ymax = median_plus_sem, fun.ymin = median_minus_sem,
+               geom = "linerange", aes(group = 1), size =1) +  
+  
+  # Labeling
+  geom_hline(yintercept = 0, linetype='solid') +
+  ylab("Measured flicker (L-M)/(L+M+S) contrast") +
+  xlab("Melanopic condition") +
+  ggtitle("L-M splatter of flicker at thresholds (Adapt)") +
+  theme_bw()
+ggsave(here('figs','S3A.splatter.adapt.flickerLM.splatter.pdf'), width = 10, height = 5)
+```
+# Predict JNDs
+If L-M contrast detection is the mechanism setting thresholds in the current experiment, what would the predcited JNDs be? Assume (absolute) `LMMeasured` at threshold is constant across melanopic conditions. (absolute) `LMMeasured` related to nominal LMS contrast by `LMoverLMsnominal`, so predict nominal LMS contrast at threshold from that. Multiply predicted LMS contrast by background LMS content to predict JND.
+```{r calculate abs(L-M)/(L+M+S)}
+threshold_contrasts <- thresholds_splatter %>%
+  mutate(LMMeasured = abs(LMMeasured),
+         LMoverLMSmeasured = LMMeasured/contrastMeasuredQuick,
+         LMoverLMSnominal = LMMeasured/contrastNominal) %>%
+  select(LMMeasured, LMoverLMSnominal, LMSBackgroundNominal)
+```
+Pivot dataframe to wide-format: separate columns for `high` and `low` conditions, row per session. Set L-M contrast at threshold in `high` condition equal to L-M contrast at threshold in in `low` condition. Pivot back to tall-format, with separate rows for low and high melanopic conditions indicated by column `level`.
+```{r equate nominal contrasts}
+threshold_contrasts <- threshold_contrasts %>%
+    # Pivot to wide-format: separate columns for high/low conditions, each row is a session
+    pivot_wider(names_from = level, 
+                values_from = c("LMMeasured","LMoverLMSnominal", "LMSBackgroundNominal")) %>%
+
+    # Equate nominal contrast
+    mutate(LMMeasured_high = LMMeasured_low) %>%
+  
+    # Pivot back to tall
+    pivot_longer(cols = contains("_"),
+                 names_to = c(".value", "level"),
+                 names_pattern = "(.*)_(.*)"
+                 )
+```
+Use the ratio of measured L-M to nominal contrast to calculate `LMScontrastPredicted` from the `LMMeasured` of each acquisition.
+```{r predict LMS contrast}
+threshold_contrasts <- threshold_contrasts %>%
+    # Predict LMS contrast from nominal predicted contrast
+    mutate(LMScontrastPredicted = LMMeasured / LMoverLMSnominal)
+```
+Multiply by `LMSBackgroundNominal` to get `threshold_JND`.
+```{r predict JNDs}
+JNDs <- threshold_contrasts %>%
+    # Calculate JND
+    mutate(threshold_JND = LMScontrastPredicted * LMSBackgroundNominal)
+```
+
+# Plot the predicted JNDs in standard format
+Normalize the JNDs by the median JND on the low melanopic background, calculate the `median_JNDs` per participant (after normalization), and plot.
+```{r plot in standard format}
+JNDs <- normalize_JNDs(JNDs)
+plot_JNDs(JNDs) +
+    ylab("Predicted threshold (LMS JND, normalized") +
+    ggtitle("Predicted threshold, if flicker LMS splatter is considered (Adapt)")
+ggsave(here('figs','S3B.JNDs.adapt.flickerLM.splatter.pdf'), width = 10, height = 5)
+```
