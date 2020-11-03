@@ -11,7 +11,7 @@ plot_receptors <- function (receptors) {
     # Labels
     ylab("Sensitivity (normalized)") +
     xlab("Wavelength (nm)") +
-    scale_y_continuous(breaks = FALSE) +
+    #scale_y_continuous(breaks = FALSE) +
     
     # theme
     theme_bw() +  
@@ -35,7 +35,7 @@ plot_lowhigh <- function(SPDs) {
     # Labels
     ylab("Radiometric Power") +
     xlab("Wavelength (nm)") +
-    scale_y_continuous(breaks = FALSE) +
+    #scale_y_continuous(breaks = FALSE) +
     scale_color_discrete(guide = "none") +
     
     # theme
@@ -60,7 +60,7 @@ plot_lowflicker <- function(SPDs) {
     # Labels
     ylab("Radiometric Power") +
     xlab("Wavelength (nm)") +
-    scale_y_continuous(breaks = FALSE) +
+    #scale_y_continuous(breaks = FALSE) +
     
     # theme
     theme_bw() +  
