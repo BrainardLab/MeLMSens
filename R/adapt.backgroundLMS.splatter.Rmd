@@ -50,16 +50,12 @@ backgroundLMS <- backgroundLMS %>%
 ggplot(data = backgroundLMS) +
   # Setup mapping: melanopic level on horizontal, LMS content on vertical
   aes(x = level, y = LMSBackgroundMeasured_Relative) +
-  # Separate panels for participants
-  facet_grid(~ participant) +
-  
-  # Plot each session
-  geom_line(aes(group = session), alpha = .6) +
-  # Plot median for participant
-  stat_summary(fun.y = median, geom = "point", aes(group=1), size =1) +
-  stat_summary(fun.y = median, geom = "line", aes(group=1), size =1) +
-  stat_summary(fun.y = median, fun.ymax = median_plus_sem, fun.ymin = median_minus_sem,
-               geom = "linerange", aes(group = 1), size =1) +
+
+  # Plot median for each participant
+  stat_summary(fun = median, geom = "point", aes(group=participant), size =1, alpha = .7) +
+  stat_summary(fun = median, geom = "line", aes(group=participant), size =1,alpha = .7) +
+  stat_summary(fun = median, fun.max = median_plus_sem, fun.min = median_minus_sem,
+               geom = "linerange", aes(group = participant), size =1,alpha = .4) +
   
   # Labeling
   geom_hline(yintercept = 1, linetype='solid') +
@@ -67,7 +63,7 @@ ggplot(data = backgroundLMS) +
   xlab("Melanopic condition") +
   ggtitle("LMS splatter of backgrounds (Adapt)") +
   theme_bw()
-ggsave(here('figs','S1A.splatter.adapt.backgroundLMS.splatter.pdf'), width = 10, height = 5)
+ggsave(here('figs','3AL.splatter.adapt.backgroundLMS.splatter.pdf'), width = 5, height = 5)
 ```
 # Predict JNDs
 Rotate dataframe to wide-format: separate columns for `high` and `low` nominal contrast at threshold per session. Set `high` nominal contrast at threshold equal to `low` nominal contrast at threshold. Rotate back to tall-format, with separate rows for low and high melanopic conditions indicated by columns `level` and `LMScontrastPredicted` for the predicted nominal contrast. Calculate `threshold_JND`, multiplying `LMScontrastPredicted` by `LMSBackgroundMeasured`.
@@ -91,8 +87,22 @@ JNDs <- thresholds_splatter %>%
 Normalize the JNDs by the median JND on the low melanopic background, calculate the `median_JNDs` per participant (after normalization), and plot.
 ```{r plot in standard format}
 JNDs <- normalize_JNDs(JNDs)
-plot_JNDs(JNDs) +
+ggplot(data = JNDs) +
+    aes(x = level, y = JND, group=session) +
+    
+    # Plot median for each participant
+    stat_summary(fun = median, geom = "point", aes(group=participant), size =1, alpha = .6, color = "blue") +
+    stat_summary(fun = median, geom = "line", aes(group=participant), size =1, alpha = .6, color = "blue") +
+    stat_summary(fun = median, fun.max = median_plus_sem, fun.min = median_minus_sem,
+                 geom = "linerange", aes(group = participant), size =1, alpha = .6, color = "blue") +
+    
+    # Markup
+    scale_y_continuous(breaks = seq(-2,7,1), limits = c(-3,7)) +
+    geom_hline(yintercept = 1, linetype='solid') +
+    geom_hline(yintercept = 4.5, linetype='dashed') +    
     ylab("Predicted threshold (LMS JND, normalized") +
-    ggtitle("Predicted threshold, if background LMS splatter is considered (Adapt)")
-ggsave(here('figs','S1B.JNDs.adapt.backgroundLMS.splatter.pdf'), width = 10, height = 5)
+    xlab("Adaptation level") +
+    theme_bw() +
+    ggtitle("Predicted threshold, if background LMS splatter is considered")
+ggsave(here('figs','3AR.JNDs.adapt.backgroundLMS.splatter.pdf'), width = 5, height = 5)
 ```
