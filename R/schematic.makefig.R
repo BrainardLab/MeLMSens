@@ -22,13 +22,7 @@ make_fig_receptors <- function() {
 
 make_fig_lowhigh <- function() {
   # Load
-  SPDs = read_csv(here('data','example','example.SPDs.csv'),
-                  col_names = c("Wls",
-                                "LMS_low","LMS_low_pos","LMS_low_neg",
-                                "LMS_high","LMS_high_pos","LMS_high_neg",
-                                "Mel_low","Mel_low_pos","Mel_low_neg",
-                                "Mel_high","Mel_high_pos","Mel_high_neg"
-                  ))
+  SPDs = read_csv(here('data','example','example.SPDs.csv'))
   
   # Plot
   p <- plot_lowhigh(SPDs)
@@ -39,13 +33,7 @@ make_fig_lowhigh <- function() {
 
 make_fig_flickerlow <- function() {
   # Load
-  SPDs = read_csv(here('data','example','example.SPDs.csv'),
-                  col_names = c("Wls",
-                                "LMS_low","LMS_low_pos","LMS_low_neg",
-                                "LMS_high","LMS_high_pos","LMS_high_neg",
-                                "Mel_low","Mel_low_pos","Mel_low_neg",
-                                "Mel_high","Mel_high_pos","Mel_high_neg"
-                  ))
+  SPDs = read_csv(here('data','example','example.SPDs.csv'))
   
   # Plot
   p <- plot_lowflicker(SPDs)
