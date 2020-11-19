@@ -42,13 +42,14 @@ thresholds_splatter <- thresholds_splatter %>%
 ```{r visualize flicker LMS splatter}
 ggplot(data = thresholds_splatter) +
   # Setup mapping: melanopic level on horizontal, L-M contrast on vertical
-  aes(x = level, y = LMoverLMSmeasured) +
+  aes(x = level, y = LMoverLMSmeasured,
+      group = participant) +
 
   # Plot median for each participant
-  stat_summary(fun = median, geom = "point", aes(group=participant), size =1, alpha = .6, color = "Red") +
-  stat_summary(fun = median, geom = "line", aes(group=participant), size =1, alpha = .6, color = "Red") +
+  stat_summary(fun = median, geom = "point",size =1, alpha = .6, color = "Red", position = position_dodge(width = .08)) +
+  stat_summary(fun = median, geom = "line", size =1, alpha = .6, color = "Red", position = position_dodge(width = .08)) +
   stat_summary(fun = median, fun.max = median_plus_sem, fun.min = median_minus_sem,
-               geom = "linerange", aes(group = participant), size =1, alpha = .6, color = "Red") +  
+               geom = "linerange", size =1, alpha = .6, color = "Red", position = position_dodge(width = .08)) +  
   
   # Labeling
   geom_hline(yintercept = 0, linetype='solid') +
@@ -101,13 +102,13 @@ Normalize the JNDs by the median JND on the low melanopic background, calculate 
 ```{r plot in standard format}
 JNDs <- normalize_JNDs(JNDs)
 ggplot(data = JNDs) +
-    aes(x = level, y = JND, group=session) +
+    aes(x = level, y = JND, group=participant) +
     
     # Plot median for each participant
-    stat_summary(fun = median, geom = "point", aes(group=participant), size =1, alpha = .6, color = "blue") +
-    stat_summary(fun = median, geom = "line", aes(group=participant), size =1, alpha = .6, color = "blue") +
+    stat_summary(fun = median, geom = "point", size =1, alpha = .6, color = "blue", position = position_dodge(width = .08)) +
+    stat_summary(fun = median, geom = "line", size =1, alpha = .6, color = "blue", position = position_dodge(width = .08)) +
     stat_summary(fun = median, fun.max = median_plus_sem, fun.min = median_minus_sem,
-                 geom = "linerange", aes(group = participant), size =1, alpha = .6, color = "blue") +
+                 geom = "linerange", size =1, alpha = .6, color = "blue", position = position_dodge(width = .08)) +
     
     # Markup
     scale_y_continuous(breaks = seq(-2,7,1), limits = c(-3,7)) +
