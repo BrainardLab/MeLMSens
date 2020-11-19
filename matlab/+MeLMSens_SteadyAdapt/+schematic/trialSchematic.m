@@ -5,18 +5,18 @@ framerate = 200;
 %% plot
 F = figure(1); clf; F.Position = [1000 500 800 800];
 ax = gca; cla;  hold on;
-plot3(ax,0.2*waveformLMS,waveformTimebase,melContrast*waveformMel);
+plot3(ax,0.2*waveformLMS,waveformTimebase,melContrast*waveformMel+1,'color','red','LineWidth',1.5);
 xlabel('LMS contrast');
-zlabel('Melanopic excitation');
+zlabel('Melanopic level');
 ylabel('Time (s)');
 ax.YDir = 'reverse';
 ax.XLim = [-.3 .3];
-ax.YLim = [0 3.5];
-ax.ZLim = [0 4];
+ax.YLim = [0 3.25];
+ax.ZLim = [1 4.5];
 view(315,35);
 grid on;
 for i = markerTimes
-    line(ax,[-.05 .05],[i i],melContrast*[1 1],'Color','red','linestyle','--');
+    line(ax,[-.05 .05],[i i],melContrast*[1 1]+1,'Color','black','linestyle','--','LineWidth',1.5);
 end
 
 %% Export
@@ -35,19 +35,20 @@ framerate = 200;
 %% plot
 F = figure(1); clf; F.Position = [1000 500 800 800];
 ax = gca; cla;  hold on;
-plot3(ax,0.2*waveformLMS,waveformTimebase,melContrast*waveformMel);
+plot3(ax,0.2*waveformLMS,waveformTimebase,melContrast*waveformMel+1,'color','red','LineWidth',1.5);
 xlabel('LMS contrast');
-zlabel('Melanopic excitation');
+zlabel('Melanopic level');
 ylabel('Time (s)');
 ax.YDir = 'reverse';
 ax.XLim = [-.3 .3];
-ax.YLim = [0 3.5];
-ax.ZLim = [0 4];
+ax.YLim = [0 3.25];
+ax.ZLim = [1 4.5];
 view(315,35);
 grid on;
 for i = markerTimes
-    line(ax,[-.05 .05],[i i],melContrast*[1 1],'Color','red','linestyle','--');
+    line(ax,[-.05 .05],[i i],melContrast*[1 1]+1,'Color','black','linestyle','--','LineWidth',1.5);
 end
+
 
 %% Export
 F.PaperOrientation = 'landscape';
